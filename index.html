@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.2.3/foundation.css">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,500" rel="stylesheet">
+</head>
+<body>
+<div class="row pdt">
+ 
+    <div class="medium-6 columns text-center">
+		<form action="upload.php" method="post" enctype="multipart/form-data">
+		    Select image to upload:
+		    <input type="file" name="fileToUpload" id="fileToUpload">
+		    <input type="submit" value="Upload Image" class="button upload-btn" name="submit">
+		</form>
+	</div>
+</div>
+
+<style>
+	body{
+		background:#f7f7f7;
+	}
+
+	*{
+		font-family: 'Raleway', sans-serif;
+
+	}
+	.pdt{
+		padding-top: 150px;
+	}
+	.upload-btn{
+		font-weight: 500;
+
+	}
+</style>
+</body>
+</html>
