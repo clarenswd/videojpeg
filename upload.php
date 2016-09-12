@@ -31,11 +31,12 @@ if(isset($_POST["submit"])) {
     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
      if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
 
-		//Rename FIle
+		
 		$directorio = "/home/lifeware/webapps/muravideo/uploads/";
 		//Clean all the previous frames
 		clean_frames($directorio."frames");
-	     
+	    
+	    //Rename FIle 
 	    // echo "=>". basename( $_FILES["fileToUpload"]["name"])."";
 		$video_name = rename ($directorio.basename($_FILES["fileToUpload"]["name"]),$directorio."video.mp4");
 
