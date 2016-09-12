@@ -45,7 +45,7 @@ if(isset($_POST["submit"])) {
  
 		
 
-        echo '<a download href="http://mura.lifeware.webfactional.com/myvideo.jpg">Download</a>';
+        echo '<a download class="button success button_padded_top" href="http://mura.lifeware.webfactional.com/myvideo.jpg">Download</a>';
 
 
 

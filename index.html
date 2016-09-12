@@ -10,14 +10,11 @@
 	<div class="small-12 text-center medium-6 medium-centered columns">
 		<div id="dragandrophandler" class="text-center">Drag & Drop Files Here</div>
 		<div id="status1"></div>
+		<div id="reset_btn"><a href="#" class="jx-reset button">RESET</a></div>
 	</div>
 </div>
 
-<div class="row pdt">
-
-
-	
- 
+<div class="row pdt hide"> 
     <div class="small-6 small-centered columns ">
     	 
     	<h4>Only MP4 files supported.</h4>
@@ -57,7 +54,7 @@
 	#dragandrophandler
 	{
 		border:2px dotted #0B85A1;
-		width:300px;
+		width:100%;
 		color:#92AAB0;
 		text-align:center;
 		vertical-align:middle;
@@ -67,65 +64,91 @@
 	    margin: 0 auto;
 
 	}
-.progressBar {
-    width: 200px;
-    height: 22px;
-    border: 1px solid #ddd;
-    border-radius: 5px; 
-    overflow: hidden;
-    display:inline-block;
-    margin:0px 10px 5px 5px;
-    vertical-align:top;
-}
+	.progressBar {
+	    width: 100%;
+	    height: 22px;
+	    border: 1px solid #ddd;
+	    border-radius: 5px; 
+	    overflow: hidden;
+	    display:block;
+	    vertical-align:top;
+	}
  
-.progressBar div {
-    height: 100%;
-    color: #fff;
-    text-align: right;
-    line-height: 22px; /* same as #progressBar height if we want text middle aligned */
-    width: 0;
-    background-color: #0ba1b5; border-radius: 3px; 
-}
-.statusbar
-{
-    border-top:1px solid #A9CCD1;
-    min-height:25px;
-    width:700px;
-    padding:10px 10px 0px 10px;
-    vertical-align:top;
-}
-.statusbar:nth-child(odd){
-    background:#EBEFF0;
-}
+	.progressBar div {
+	    height: 100%;
+	    color: #fff;
+	    text-align: right;
+	    line-height: 22px; /* same as #progressBar height if we want text middle aligned */
+	    width: 0;
+	    background-color: #0ba1b5; border-radius: 3px; 
+	}
+	.statusbar
+	{
+	  
+	    min-height:25px;
+	    width:100%;
+	    padding:10px 10px 0px 10px;
+	    vertical-align:top;
+	}
+	.statusbar:nth-child(odd){
+	    background:#EBEFF0;
+	}
 	.filename
-{
-display:inline-block;
-vertical-align:top;
-width:250px;
-}
-.filesize
-{
-display:inline-block;
-vertical-align:top;
-color:#30693D;
-width:100px;
-margin-left:10px;
-margin-right:5px;
-}
-.abort{
-    background-color:#A8352F;
-    -moz-border-radius:4px;
-    -webkit-border-radius:4px;
-    border-radius:4px;display:inline-block;
-    color:#fff;
-    font-family:arial;font-size:13px;font-weight:normal;
-    padding:4px 15px;
-    cursor:pointer;
-    vertical-align:top
+	{
+		display:block;
+		vertical-align:top;
+		width:100%;
+		text-align: center;
+	}
+	.filesize
+	{
+		 
+		vertical-align:top;
+		color:#30693D;
+		width:100%;
+		margin:0 auto; 
+		display: block;
+	}
+	.abort{
+	    background-color:#A8352F;
+	    -moz-border-radius:4px;
+	    -webkit-border-radius:4px;
+	    border-radius:4px;display:inline-block;
+	    color:#fff;
+	    font-family:arial;font-size:13px;font-weight:normal;
+	    padding:4px 15px;
+	    cursor:pointer;
+	    vertical-align:top
     }
+
+    .button_padded_top{
+    	/*margin-top: 50px;*/
+    }
+
+    #status1{
+	    width: 50%;
+    	float: left;
+    }
+
+    #reset_btn{
+		width: 50%;
+    	float: right;
+    }
+
 </style>
+
+<!-- jQuery is not defined inside ELectron APP
+	Solution: http://stackoverflow.com/questions/32621988/electron-jquery-is-not-defined
+ -->
+
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script>
+
+
+
+
 	 
 
 	function sendFileToServer(formData,status)
@@ -159,7 +182,12 @@ margin-right:5px;
 	        success: function(data){
 	            status.setProgress(100);
 	 			console.log(data);
-	            $("#status1").append(data);           
+	 			//Print the Download Btn
+	            $("#status1").html(data);      
+	            //Hide the Upload Panel     
+	            $('#dragandrophandler').slideUp();
+				$('.jx-reset').show();
+
 	        }
 	    }); 
 	 
@@ -204,6 +232,9 @@ function createStatusbar(obj)
 	        {
 	            this.abort.hide();
 	        }
+
+	        $('#status1').html("Processing...");
+
 	    }
 	    this.setAbort = function(jqxhr)
 	    {
@@ -232,52 +263,29 @@ function handleFileUpload(files,obj)
 }
 
 
-var obj = $("#dragandrophandler");
-	
-	obj.on('dragenter', function (e) 
-	{
-	    e.stopPropagation();
-	    e.preventDefault();
-	    $(this).css('border', '2px solid #0B85A1');
-	});
-
-	obj.on('dragover', function (e) 
-	{
-	     e.stopPropagation();
-	     e.preventDefault();
-	});
-	
-	obj.on('drop', function (e) 
-	{
-	     $(this).css('border', '2px dotted #0B85A1');
-	     e.preventDefault();
-	     var files = e.originalEvent.dataTransfer.files;
-	     //We need to send dropped files to Server
-	     handleFileUpload(files,obj);
-	});
-
-	$(document).on('dragenter', function (e) 
-	{
-	    e.stopPropagation();
-	    e.preventDefault();
-	});
-
-	$(document).on('dragover', function (e) 
-	{
-	  e.stopPropagation();
-	  e.preventDefault();
-	  obj.css('border', '2px dotted #0B85A1');
-	});
-
-	$(document).on('drop', function (e) 
-	{
-	    e.stopPropagation();
-	    e.preventDefault();
-	});
-
-
 $(document).ready(function()
 {
+
+	//Hide RESET Btn
+
+	$('.jx-reset').hide();
+
+
+	//Show  Upload Fragment Event Handler
+	$('.jx-reset').on('click', function(e){
+		e.preventDefault();
+		
+		//Show Upload fragment
+	    $('#dragandrophandler').slideDown();
+
+	    //Remove elements 
+		$('.statusbar').remove();	    
+		$('#status1').empty();
+
+		$(this).fadeOut();
+	});
+
+
 	var obj = $("#dragandrophandler");
 	
 	obj.on('dragenter', function (e) 
@@ -302,21 +310,26 @@ $(document).ready(function()
 	     handleFileUpload(files,obj);
 	});
 
-	$(document).on('dragenter', function (e) 
+	$(document).bind('dragenter', function (e) 
 	{
 	    e.stopPropagation();
 	    e.preventDefault();
+		console.log("dragenter bind");
+
 	});
 
-	$(document).on('dragover', function (e) 
+	$(document).bind('dragover', function (e) 
 	{
 	  e.stopPropagation();
 	  e.preventDefault();
+	  console.log("dragover bind");
 	  obj.css('border', '2px dotted #0B85A1');
 	});
 
-	$(document).on('drop', function (e) 
+	$(document).bind('drop', function (e) 
 	{
+
+		console.log("drop bind");
 	    e.stopPropagation();
 	    e.preventDefault();
 	});
@@ -324,6 +337,6 @@ $(document).ready(function()
 
 
 </script>
-
+<script>if (window.module) module = window.module;</script>
 </body>
 </html>
